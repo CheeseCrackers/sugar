@@ -1,6 +1,8 @@
 package com.orm;
 
-public class SugarApp extends android.app.Application{
+import android.support.multidex.MultiDexApplication;
+
+public class SugarApp extends MultiDexApplication{
 
     private Database database;
     private static SugarApp sugarContext;

@@ -4,19 +4,21 @@ buildscript {
         }
 
         dependencies {
-            classpath 'com.android.tools.build:gradle:0.9.+'
+            classpath 'com.android.tools.build:gradle:1.0.0'
         }
     }
 
-    apply plugin: 'android-library'
+
+    apply plugin: 'com.android.library'
 
     dependencies {
-        compile 'com.android.support:support-v4:19.0.1'
+        compile 'com.android.support:support-v4:21.0.2'
+        compile 'com.android.support:multidex:1.0.0'
     }
 
     android {
-        compileSdkVersion 19
-        buildToolsVersion "19.0.3"
+        compileSdkVersion 21
+        buildToolsVersion "21.1.1"
         sourceSets {
             main {
                 manifest.srcFile 'AndroidManifest.xml'
