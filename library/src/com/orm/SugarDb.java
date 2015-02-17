@@ -9,9 +9,12 @@ import android.util.Log;
 import dalvik.system.DexFile;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -25,6 +28,12 @@ public class SugarDb extends SQLiteOpenHelper {
 
     public SugarDb(Context context) {
         super(context, SugarConfig.getDatabaseName(context), new SugarCursorFactory(getDebugEnabled(context)), getDatabaseVersion(context));
+
+//        super(context, context.getExternalFilesDir(null).getAbsolutePath() + "/" + SugarConfig.getDatabaseName(context),
+//                new SugarCursorFactory(getDebugEnabled(context)), getDatabaseVersion(context));
+
+        Log.d("SeedingSugar", "SugarDb initialized at " + context.getExternalFilesDir(null).getAbsolutePath() + "/" + SugarConfig.getDatabaseName(context));
+
         this.context = context;
 
     }
@@ -98,6 +107,43 @@ public class SugarDb extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         Log.i("Sugar", "on create");
         createDatabase(sqLiteDatabase);
+    }
+
+    public SQLiteDatabase importDatabase(){
+        final String dbName = SugarConfig.getDatabaseName(context);
+        final File dbFile = context.getDatabasePath(dbName);
+
+        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null);
+        sqLiteDatabase.close();
+        sqLiteDatabase = null;
+
+        final File dstFile = context.getDatabasePath(dbName);
+
+        try {
+            final InputStream is = this.context.getAssets().open("database/" + dbName);
+            final OutputStream os = new FileOutputStream(dstFile);
+
+            final byte[] buffer = new byte[1024];
+            int count = -1;
+            long size = 0;
+
+            while ((count = is.read(buffer)) != -1) {
+                os.write(buffer, 0, count);
+                size += count;
+            }
+
+            os.flush();
+            is.close();
+            os.close();
+
+            sqLiteDatabase = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
+
+        } catch (IOException e) {
+            Log.e("SeedingSugar", "Failed to import database", e);
+            return null;
+        }
+
+        return sqLiteDatabase;
     }
 
     private <T extends SugarRecord<?>> void createDatabase(SQLiteDatabase sqLiteDatabase) {
