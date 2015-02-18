@@ -29,13 +29,7 @@ public class SugarDb extends SQLiteOpenHelper {
     public SugarDb(Context context) {
         super(context, SugarConfig.getDatabaseName(context), new SugarCursorFactory(getDebugEnabled(context)), getDatabaseVersion(context));
 
-//        super(context, context.getExternalFilesDir(null).getAbsolutePath() + "/" + SugarConfig.getDatabaseName(context),
-//                new SugarCursorFactory(getDebugEnabled(context)), getDatabaseVersion(context));
-
-        Log.d("SeedingSugar", "SugarDb initialized at " + context.getExternalFilesDir(null).getAbsolutePath() + "/" + SugarConfig.getDatabaseName(context));
-
         this.context = context;
-
     }
 
     private <T extends SugarRecord<?>> List<T> getDomainClasses(Context context) {
