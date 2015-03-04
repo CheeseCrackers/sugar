@@ -133,7 +133,7 @@ public class SugarDb extends SQLiteOpenHelper {
             sqLiteDatabase = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
 
         } catch (IOException e) {
-            Log.e("SeedingSugar", "Failed to import database", e);
+            Log.w("SeedingSugar", "Failed to import database", e);
             return null;
         }
 
