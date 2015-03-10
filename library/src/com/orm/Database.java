@@ -18,14 +18,14 @@ public class Database {
 
         if (this.sqLiteDatabase == null) {
             Log.d("SeedingSugar", "Sqlitedatabase is null and hasn't been created yet");
-            this.sqLiteDatabase = this.sugarDb.importDatabase();
+            //this.sqLiteDatabase = this.sugarDb.importDatabase();
 
             if (this.sqLiteDatabase == null) {
-                Log.d("SeedingSugar", "Database import failed");
+                //Log.d("SeedingSugar", "Database import failed");
                 this.sqLiteDatabase = this.sugarDb.getWritableDatabase();
 
             } else {
-                Log.d("SeedingSugar", "Database import succeeded");
+                //Log.d("SeedingSugar", "Database import succeeded");
             }
         }
 
